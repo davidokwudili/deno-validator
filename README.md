@@ -19,9 +19,10 @@ validator.isEmail('foo@bar.com'); //=> true
 ## Validators
 
 Here is a list of the validators currently available.
-Validator                               | Description
---------------------------------------- | --------------------------------------
-**equals(str, comparison [, options])**             | check if the string matches the comparison.<br/><br/>`options` is an object which defaults to `{ trim: false, ignore_case: false }`.
-**isEmpty(str [, options])**             | check if the string has a length of zero. <br/><br/>`options` is an object which defaults to `{ ignore_whitespace:false }`.
-**isLowerCase(str)**             | check if the string is lowercase.
-**isUpperCase(str)**             | check if the string is uppercase.
+
+| Validator | Description |
+| - | - |
+| **equals(str, comparison [, options])** | check if the string matches the comparison.<br/><br/>`options` is an object which defaults to `{ trim: false, ignore_case: false }`. |
+| **isEmpty(str [, options])** | check if the string has a length of zero. <br/><br/>`options` is an object which defaults to `{ ignore_whitespace:false }`. |
+| **isLowerCase(str)** | check if the string is lowercase. |
+| **isUpperCase(str)** | check if the string is uppercase. |
