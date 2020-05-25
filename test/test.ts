@@ -1,63 +1,117 @@
-import {
-    assertEquals,
-    assertThrows,
-} from "https://deno.land/std/testing/asserts.ts";
-import * as validator from "../mod.ts";
+import test from './test-template.ts'
 
-Deno.test('isEmpty', function (): void {
-    assertEquals(validator.isEmpty(""), true);
-    assertEquals(validator.isEmpty("foo"), false);
-    assertEquals(validator.isEmpty("   "), false);
-    assertEquals(validator.isEmpty("   ", { ignore_whitespace: true }), true);
+test({
+    validator: 'equals',
+    args: ['abc'],
+    valid: ['abc'],
+    invalid: ['Abc', '123']
 })
 
-Deno.test('isFullWidth', function (): void {
-    [
+test({
+    validator: 'equals',
+    args: ['abc ', { trim: true }],
+    valid: ['  abc  '],
+    invalid: ['Abc', '123']
+})
+
+test({
+    validator: 'equals',
+    args: ['abc', { ignore_case: true }],
+    valid: ['abc', 'AbC'],
+    invalid: ['@bc', '123']
+})
+
+test({
+    validator: 'isEmpty',
+    valid: [
+        '',
+    ],
+    invalid: [
+        ' ',
+        'foo',
+        '3',
+    ],
+});
+
+test({
+    validator: 'isEmpty',
+    args: [{ ignore_whitespace: false }],
+    valid: [
+        '',
+    ],
+    invalid: [
+        ' ',
+        'foo',
+        '3',
+    ],
+});
+
+test({
+    validator: 'isEmpty',
+    args: [{ ignore_whitespace: true }],
+    valid: [
+        '',
+        ' ',
+    ],
+    invalid: [
+        'foo',
+        '3',
+    ],
+});
+
+test({
+    validator: 'isFullWidth',
+    valid: [
         'ひらがな・カタカナ、．漢字',
         '３ー０　ａ＠ｃｏｍ',
         'Ｆｶﾀｶﾅﾞﾬ',
         'Good＝Parts',
-    ].forEach(e => {
-        assertEquals(validator.isFullWidth(e), true)
-    });
-
-    [
+    ],
+    invalid: [
         'abc',
         'abc123',
         '!"#$%&()<>/+=-_? ~^|.,@`{}[]',
-    ].forEach(e => {
-        assertEquals(validator.isFullWidth(e), false)
-    });
+    ],
 })
 
-Deno.test('isHalfWidth', function (): void {
-    [
+test({
+    validator: 'isHalfWidth',
+    valid: [
         '"#$%&()<>/+=-_? ~^|.,@`{}[]',
         'l-btn_02--active',
         'abc123い',
         'ｶﾀｶﾅﾞﾬ￩',
-    ].forEach(e => {
-        assertEquals(validator.isHalfWidth(e), true)
-    });
-
-    [
+    ],
+    invalid: [
         'あいうえお',
         '００１１',
-    ].forEach(e => {
-        assertEquals(validator.isHalfWidth(e), false)
-    });
+    ]
 })
 
-Deno.test('isLowerCase', function (): void {
-    assertEquals(validator.isLowerCase(""), true);
-    assertEquals(validator.isLowerCase("foo"), true);
-    assertEquals(validator.isLowerCase("BAR"), false);
-    assertEquals(validator.isLowerCase("BaZ"), false);
+test({
+    validator: 'isLowerCase',
+    valid: [
+        'abc',
+        'abc123',
+        'this is lowercase.',
+        'tr竪s 端ber',
+    ],
+    invalid: [
+        'fooBar',
+        '123A',
+    ],
 })
 
-Deno.test('isUpperCase', function (): void {
-    assertEquals(validator.isUpperCase(""), true);
-    assertEquals(validator.isUpperCase("foo"), false);
-    assertEquals(validator.isUpperCase("BAR"), true);
-    assertEquals(validator.isUpperCase("BaZ"), false);
-})
+test({
+    validator: 'isUpperCase',
+    valid: [
+        'ABC',
+        'ABC123',
+        'ALL CAPS IS FUN.',
+        '   .',
+    ],
+    invalid: [
+        'fooBar',
+        '123abc',
+    ],
+});
